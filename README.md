@@ -1,6 +1,12 @@
-# Routes.js
+# routes-typescript 
 
-`routes` lets you easily dispatch based on url-style strings.  It comes with a default `Router` function that you can use to route http requests, but it also cleanly exposes the important functionality so you could also use it to perform more generic string pattern matching.
+This project was forked from https://github.com/aaronblohowiak/routes.js in order to add  
+typescript support and better bundling with vite.   
+There are a lot of string-based routing libraries out there, but I found it worth forking  
+and releasing this as a separate project since the original is unmaintained, and because  
+it is very small and concise.
+
+`routes-typescript` lets you easily dispatch based on url-style strings.  It comes with a default `Router` function that you can use to route http requests, but it also cleanly exposes the important functionality so you could also use it to perform more generic string pattern matching.
 
 This might make it useful for things like:
 
@@ -8,15 +14,6 @@ This might make it useful for things like:
 * Cucumber-style pattern matching :)
 * Routing messages by channel name from an MQ
 * Dispatching hierarchical events by name
-
-## Alternative routers.
-
-This module is no longer actively worked on. This module operates just fine as is,
-  however you might want to use a module that is under active maintenance:
-  
- - https://github.com/Matt-Esch/http-hash
- - https://github.com/glassresistor/i40
- - https://github.com/bevacqua/ruta3
 
 ## Router Example:
 
@@ -130,7 +127,9 @@ function adminUsers(req, res, match) {
 
 ## Installation
 
-    npm install routes
+    npm i routes-typescript
+    yarn add routes-typescript
+    bun add routes-typescript
 
 ## Path Formats
 

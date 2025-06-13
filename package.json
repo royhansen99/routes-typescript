@@ -1,10 +1,12 @@
 {
-  "name": "routes",
-  "description": "Minimalist route matching for javascript",
+  "name": "routes-typescript",
+  "description": "Minimalist route matching for javascript/typescript.",
   "version": "2.1.0",
-  "homepage": "https://github.com/aaronblohowiak/routes.js",
-  "repository": "https://github.com/aaronblohowiak/routes.js.git",
-  "author": "Aaron Blohowiak <aaron.blohowiak@gmail.com> (http://github.com/aaronblohowiak)",
+  "repository": "github:royhansen99/routes-typescript",
+  "bugs": "https://github.com/royhansen99/routes-typescript/issues",
+  "authors": [
+    "Roy Hansen <roy@royhansen.no> (https://github.com/royhansen99)"
+  ],
   "license": "MIT",
   "main": "dist/routes",
   "directories": {
