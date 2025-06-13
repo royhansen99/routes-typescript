@@ -174,7 +174,5 @@ var Router = function () {
 Router.Route = Route
 Router.pathToRegExp = pathToRegExp
 Router.match = match
-// back compat
-Router.Router = Router
 
-module.exports = Router
+export default Router
