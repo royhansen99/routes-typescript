@@ -8,20 +8,21 @@
  * @return {Object}
  */
 
-var Route = function(path){
+var Route = function (path) {
   //using 'new' is optional
 
-  var re, keys = [];
+  var re,
+    keys = []
 
-  if(path instanceof RegExp) re = path;
-  else re = pathToRegExp(path, keys);
+  if (path instanceof RegExp) re = path
+  else re = pathToRegExp(path, keys)
 
   return {
-  	 re,
-  	 src: path.toString(),
-  	 keys
+    re,
+    src: path.toString(),
+    keys,
   }
-};
+}
 
 /**
  * Normalize the given path string,
@@ -37,28 +38,35 @@ var Route = function(path){
  * @return {RegExp}
  */
 var pathToRegExp = function (path, keys) {
-	path = path
-		.concat('/?')
-		.replace(/\/\(/g, '(?:/')
-		.replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?|\*/g, function(_, slash, format, key, capture, optional){
-			if (_ === "*"){
-				keys.push(undefined);
-				return _;
-			}
+  path = path
+    .concat('/?')
+    .replace(/\/\(/g, '(?:/')
+    .replace(
+      /(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?|\*/g,
+      function (_, slash, format, key, capture, optional) {
+        if (_ === '*') {
+          keys.push(undefined)
+          return _
+        }
 
-			keys.push(key);
-			slash = slash || '';
-			return ''
-				+ (optional ? '' : slash)
-				+ '(?:'
-				+ (optional ? slash : '')
-				+ (format || '') + (capture || '([^/]+?)') + ')'
-				+ (optional || '');
-		})
-		.replace(/([\/.])/g, '\\$1')
-		.replace(/\*/g, '(.*)');
-	return new RegExp('^' + path + '$', 'i');
-};
+        keys.push(key)
+        slash = slash || ''
+        return (
+          '' +
+          (optional ? '' : slash) +
+          '(?:' +
+          (optional ? slash : '') +
+          (format || '') +
+          (capture || '([^/]+?)') +
+          ')' +
+          (optional || '')
+        )
+      }
+    )
+    .replace(/([\/.])/g, '\\$1')
+    .replace(/\*/g, '(.*)')
+  return new RegExp('^' + path + '$', 'i')
+}
 
 /**
  * Attempt to match the given request to
@@ -70,36 +78,38 @@ var pathToRegExp = function (path, keys) {
  * @return {Object}
  */
 var match = function (routes, uri, startAt) {
-	var captures, i = startAt || 0;
+  var captures,
+    i = startAt || 0
 
-	for (var len = routes.length; i < len; ++i) {
-		var route = routes[i],
-		    re = route.re,
-		    keys = route.keys,
-		    splats = [],
-		    params = {};
+  for (var len = routes.length; i < len; ++i) {
+    var route = routes[i],
+      re = route.re,
+      keys = route.keys,
+      splats = [],
+      params = {}
 
-		if (captures = uri.match(re)) {
-			for (var j = 1, len = captures.length; j < len; ++j) {
-				var key = keys[j-1],
-					val = typeof captures[j] === 'string'
-						? unescape(captures[j])
-						: captures[j];
-				if (key) {
-					params[key] = val;
-				} else {
-					splats.push(val);
-				}
-			}
-			return {
-				params: params,
-				splats: splats,
-				route: route.src,
-				next: i + 1
-			};
-		}
-	}
-};
+    if ((captures = uri.match(re))) {
+      for (var j = 1, len = captures.length; j < len; ++j) {
+        var key = keys[j - 1],
+          val =
+            typeof captures[j] === 'string'
+              ? unescape(captures[j])
+              : captures[j]
+        if (key) {
+          params[key] = val
+        } else {
+          splats.push(val)
+        }
+      }
+      return {
+        params: params,
+        splats: splats,
+        route: route.src,
+        next: i + 1,
+      }
+    }
+  }
+}
 
 /**
  * Default "normal" router constructor.
@@ -110,55 +120,56 @@ var match = function (routes, uri, startAt) {
  * @return {Object}
  */
 
-var Router = function(){
+var Router = function () {
   //using 'new' is optional
   return {
     routes: [],
-    routeMap : {},
-    addRoute: function(path, fn){
-      if (!path) throw new Error(' route requires a path');
-      if (!fn) throw new Error(' route ' + path.toString() + ' requires a callback');
+    routeMap: {},
+    addRoute: function (path, fn) {
+      if (!path) throw new Error(' route requires a path')
+      if (!fn)
+        throw new Error(' route ' + path.toString() + ' requires a callback')
 
       if (this.routeMap[path]) {
-        throw new Error('path is already defined: ' + path);
+        throw new Error('path is already defined: ' + path)
       }
 
-      var route = Route(path);
-      route.fn = fn;
+      var route = Route(path)
+      route.fn = fn
 
-      this.routes.push(route);
-      this.routeMap[path] = fn;
+      this.routes.push(route)
+      this.routeMap[path] = fn
     },
 
-    removeRoute: function(path) {
-      if (!path) throw new Error(' route requires a path');
+    removeRoute: function (path) {
+      if (!path) throw new Error(' route requires a path')
       if (!this.routeMap[path]) {
-        throw new Error('path does not exist: ' + path);
+        throw new Error('path does not exist: ' + path)
       }
 
-      var newRoutes = [];
+      var newRoutes = []
 
       // copy the routes excluding the route being removed
       for (var i = 0; i < this.routes.length; i++) {
-        var route = this.routes[i];
+        var route = this.routes[i]
         if (route.src !== path) {
-          newRoutes.push(route);
+          newRoutes.push(route)
         }
       }
-      this.routes = newRoutes;
-      delete this.routeMap[path];
+      this.routes = newRoutes
+      delete this.routeMap[path]
     },
 
-    match: function(pathname, startAt){
-      var route = match(this.routes, pathname, startAt);
-      if(route){
-        route.fn = this.routeMap[route.route];
+    match: function (pathname, startAt) {
+      var route = match(this.routes, pathname, startAt)
+      if (route) {
+        route.fn = this.routeMap[route.route]
         route.next = this.match.bind(this, pathname, route.next)
       }
-      return route;
-    }
+      return route
+    },
   }
-};
+}
 
 Router.Route = Route
 Router.pathToRegExp = pathToRegExp
