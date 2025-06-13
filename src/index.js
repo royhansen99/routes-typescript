@@ -1,7 +1,3 @@
-
-var localRoutes = [];
-
-
 /**
  * Convert path to route object
  *
@@ -15,20 +11,15 @@ var localRoutes = [];
 var Route = function(path){
   //using 'new' is optional
 
-  var src, re, keys = [];
+  var re, keys = [];
 
-  if(path instanceof RegExp){
-    re = path;
-    src = path.toString();
-  }else{
-    re = pathToRegExp(path, keys);
-    src = path;
-  }
+  if(path instanceof RegExp) re = path;
+  else re = pathToRegExp(path, keys);
 
   return {
-  	 re: re,
+  	 re,
   	 src: path.toString(),
-  	 keys: keys
+  	 keys
   }
 };
 
@@ -145,7 +136,6 @@ var Router = function(){
         throw new Error('path does not exist: ' + path);
       }
 
-      var match;
       var newRoutes = [];
 
       // copy the routes excluding the route being removed
