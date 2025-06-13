@@ -1,13 +1,7 @@
-var assert = require("assert"),
-    Router = require("../index"),
-    router = Router();
+import assert, { equal, deepEqual, strictEqual } from "assert";
+import Router from "../src/index.js";
 
-(function(){
-  //avoid typing assert.blah all over
-  for(k in assert){
-    this[k] = assert[k];
-  }
-})();
+var router = Router();
 
 equal(1, 1);
 
@@ -196,19 +190,19 @@ var cases = [
 ];
 
 //load routes
-for(caseIdx in cases){
-  test = cases[caseIdx];
+for(let caseIdx in cases){
+  let test = cases[caseIdx];
   router.addRoute(test.path, noop);
 }
 
 var assertCount = 0;
 
 //run tests
-for(caseIdx in cases){
-  test = cases[caseIdx];
-  for(path in test.testMatch){
-    match = router.match(path);
-    fixture = test.testMatch[path];
+for(let caseIdx in cases){
+  let test = cases[caseIdx];
+  for(let path in test.testMatch){
+    let match = router.match(path);
+    let fixture = test.testMatch[path];
 
     //save typing in fixtures
     fixture.route = test.path.toString(); // match gets string, so ensure same type
@@ -217,8 +211,8 @@ for(caseIdx in cases){
     assertCount++;
   }
 
-  for(noMatchIdx in test.testNoMatch){
-    match = router.match(test.testNoMatch[noMatchIdx]);
+  for(let noMatchIdx in test.testNoMatch){
+    let match = router.match(test.testNoMatch[noMatchIdx]);
     strictEqual(match, undefined);
     assertCount++;
   }

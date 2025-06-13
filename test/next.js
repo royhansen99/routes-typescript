@@ -1,8 +1,9 @@
-var assert = require("assert")
-var http = require('http')
-var url = require('url')
-var Routes = require('../index')
-var router = new Routes()
+import assert from "assert";
+import Router from "../src/index.js";
+import http from 'http';
+import url from 'url';
+
+var router = new Router()
 
 router.addRoute('/*?', staticFiles)
 router.addRoute('/admin/*?', auth)
