@@ -1,11 +1,11 @@
-import assert, { equal, deepEqual, strictEqual } from 'assert'
-import Router from '../src/index.js'
+import assert, { equal, deepEqual, strictEqual } from 'assert';
+import Router from '../src/index.js';
 
-var router = Router()
+var router = Router();
 
-equal(1, 1)
+equal(1, 1);
 
-var noop = function () {}
+var noop = function () {};
 
 var cases = [
   {
@@ -190,81 +190,81 @@ var cases = [
       },
     },
   },
-]
+];
 
 //load routes
 for (let caseIdx in cases) {
-  let test = cases[caseIdx]
-  router.addRoute(test.path, noop)
+  let test = cases[caseIdx];
+  router.addRoute(test.path, noop);
 }
 
-var assertCount = 0
+var assertCount = 0;
 
 //run tests
 for (let caseIdx in cases) {
-  let test = cases[caseIdx]
+  let test = cases[caseIdx];
   for (let path in test.testMatch) {
-    let match = router.match(path)
-    let fixture = test.testMatch[path]
+    let match = router.match(path);
+    let fixture = test.testMatch[path];
 
     //save typing in fixtures
-    fixture.route = test.path.toString() // match gets string, so ensure same type
-    delete match.next // next shouldn't be compared
-    deepEqual(match, fixture)
-    assertCount++
+    fixture.route = test.path.toString(); // match gets string, so ensure same type
+    delete match.next; // next shouldn't be compared
+    deepEqual(match, fixture);
+    assertCount++;
   }
 
   for (let noMatchIdx in test.testNoMatch) {
-    let match = router.match(test.testNoMatch[noMatchIdx])
-    strictEqual(match, undefined)
-    assertCount++
+    let match = router.match(test.testNoMatch[noMatchIdx]);
+    strictEqual(match, undefined);
+    assertCount++;
   }
 }
 
 //test exceptions
 assert.throws(
   function () {
-    router.addRoute()
+    router.addRoute();
   },
   /route requires a path/,
   "expected 'route requires a path' error"
-)
+);
 
-assertCount++
+assertCount++;
 
 assert.throws(
   function () {
-    router.addRoute('/')
+    router.addRoute('/');
   },
   /route \/ requires a callback/,
   "expected 'route requries a callback' error"
-)
+);
 
-assertCount++
+assertCount++;
 
 // test next
-router.addRoute('/*?', noop)
-router.addRoute('/next/x', noop)
-var match = router.match('/next/x')
-equal(typeof match.next, 'function')
-strictEqual(match.route, '/*?')
-assertCount++
-var next = match.next()
-strictEqual(next.route, '/next/x')
-assertCount++
+router.addRoute('/*?', noop);
+router.addRoute('/next/x', noop);
+var match = router.match('/next/x');
+equal(typeof match.next, 'function');
+strictEqual(match.route, '/*?');
+assertCount++;
+var next = match.next();
+strictEqual(next.route, '/next/x');
+assertCount++;
 
 // test remove
-equal(router.routes.length, 14)
-equal(Object.keys(router.routeMap).length, 14)
-router.removeRoute('/next/x')
-equal(router.routes.length, 13)
-equal(Object.keys(router.routeMap).length, 13)
-assertCount++
-match = router.match('/next/x')
+equal(router.routes.length, 14);
+equal(Object.keys(router.routeMap).length, 14);
+router.removeRoute('/next/x');
+equal(router.routes.length, 13);
+equal(Object.keys(router.routeMap).length, 13);
+assertCount++;
+match = router.match('/next/x');
 // next still available, just returns undefined
-equal(typeof match.next, 'function')
-next = match.next()
-strictEqual(next, undefined)
-assertCount++
+equal(typeof match.next, 'function');
+next = match.next();
+strictEqual(next, undefined);
+assertCount++;
 
-console.log(assertCount.toString() + ' assertions made succesfully')
+console.log(assertCount.toString() + ' assertions made succesfully');

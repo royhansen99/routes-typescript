@@ -1,14 +1,14 @@
-import Router from '../src/index.js'
+import Router from '../src/index.js';
 
-var router = Router()
+var router = Router();
 
-var noop = function () {}
+var noop = function () {};
 
-router.addRoute('/articles/:title?', noop)
-router.addRoute('/assets/*', noop)
-router.addRoute('/:controller/:action/:id.:format?', noop)
+router.addRoute('/articles/:title?', noop);
+router.addRoute('/assets/*', noop);
+router.addRoute('/:controller/:action/:id.:format?', noop);
 
-console.log(router.match('/articles'))
-console.log(router.match('/articles/never-gonna-let-you-down'))
-console.log(router.match('/assets/one/two/three/pic.jpg'))
-console.log(router.match('/posts/show/1.json'))
+console.log(router.match('/articles'));
+console.log(router.match('/articles/never-gonna-let-you-down'));
+console.log(router.match('/assets/one/two/three/pic.jpg'));
+console.log(router.match('/posts/show/1.json'));
