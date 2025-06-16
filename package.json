@@ -2,7 +2,7 @@
   "type": "module",
   "name": "routes-typescript",
   "description": "Minimalist route matching for javascript/typescript.",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "repository": "github:royhansen99/routes-typescript",
   "bugs": "https://github.com/royhansen99/routes-typescript/issues",
   "authors": [
